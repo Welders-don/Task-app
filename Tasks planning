@@ -1,0 +1,98 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Task {
+    private String description;
+    private boolean isCompleted;
+
+    public Task(String description) {
+        this.description = description;
+        this.isCompleted = false;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public boolean isCompleted() {
+        return isCompleted;
+    }
+
+    public void markAsCompleted() {
+        this.isCompleted = true;
+    }
+
+    @Override
+    public String toString() {
+        return (isCompleted ? "[✓] " : "[ ] ") + description;
+    }
+}
+
+class TaskManager {
+    private ArrayList<Task> tasks;
+
+    public TaskManager() {
+        tasks = new ArrayList<>();
+    }
+
+    public void addTask(String description) {
+        tasks.add(new Task(description));
+    }
+
+    public void markTaskAsCompleted(int taskIndex) {
+        if (taskIndex >= 0 && taskIndex < tasks.size()) {
+            tasks.get(taskIndex).markAsCompleted();
+        } else {
+            System.out.println("Задача с таким индексом не найдена.");
+        }
+    }
+
+    public void showTasks() {
+        if (tasks.isEmpty()) {
+            System.out.println("Список задач пуст.");
+            return;
+        }
+
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println(i + ": " + tasks.get(i));
+        }
+    }
+}
+
+public class TaskApp {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        TaskManager taskManager = new TaskManager();
+        boolean running = true;
+
+        while (running) {
+            System.out.println("Выберите действие: 1 - Добавить задачу, 2 - Пометить задачу как выполненную, 3 - Показать задачи, 4 - Выход");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // очищаем буфер
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Введите описание задачи: ");
+                    String description = scanner.nextLine();
+                    taskManager.addTask(description);
+                    break;
+                case 2:
+                    System.out.print("Введите индекс задачи для пометки как выполненной: ");
+                    int index = scanner.nextInt();
+                    taskManager.markTaskAsCompleted(index);
+                    break;
+                case 3:
+                    taskManager.showTasks();
+                    break;
+                case 4:
+                    running = false;
+                    System.out.println("Выход из приложения.");
+                    break;
+                default:
+                    System.out.println("Неверный выбор. Попробуйте снова.");
+            }
+        }
+
+        scanner.close();
+    }
+}
